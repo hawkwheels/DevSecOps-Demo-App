@@ -1,0 +1,399 @@
+Started by user admin
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Tool Install)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Initialize)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ echo PATH = /usr/share/maven/bin:/usr/share/maven/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+PATH = /usr/share/maven/bin:/usr/share/maven/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
++ echo M2_HOME = /usr/share/maven
+M2_HOME = /usr/share/maven
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Source Composition Analysis)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ rm owasp-dependency-check.sh
+[Pipeline] sh
++ wget https://raw.githubusercontent.com/cehkunal/webapp/master/owasp-dependency-check.sh
+--2021-01-15 10:27:12--  https://raw.githubusercontent.com/cehkunal/webapp/master/owasp-dependency-check.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.36.133
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.36.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 865 [text/plain]
+Saving to: ‘owasp-dependency-check.sh’
+
+     0K                                                       100% 26.6M=0s
+
+2021-01-15 10:27:13 (26.6 MB/s) - ‘owasp-dependency-check.sh’ saved [865/865]
+
+[Pipeline] sh
++ chmod +x owasp-dependency-check.sh
+[Pipeline] sh
++ bash owasp-dependency-check.sh
+Using default tag: latest
+latest: Pulling from owasp/dependency-check
+Digest: sha256:620d5452f48ebf96112dc10b5dcee0b64d9aea84f69b6ef92bc78dc20b463bcf
+Status: Image is up to date for owasp/dependency-check:latest
+docker.io/owasp/dependency-check:latest
+[INFO] Checking for updates
+[INFO] Skipping NVD check since last check was within 4 hours.
+[INFO] Skipping RetireJS update since last update was within 24 hours.
+[INFO] Check for updates complete (191 ms)
+[INFO] 
+
+Dependency-Check is an open source tool performing a best effort analysis of 3rd party dependencies; false positives and false negatives may exist in the analysis performed by the tool. Use of the tool and the reporting provided constitutes acceptance for use in an AS IS condition, and there are NO warranties, implied or otherwise, with regard to the analysis or its use. Any use of the tool and the reporting provided is at the user’s risk. In no event shall the copyright holder or OWASP be held liable for any damages whatsoever arising out of or in connection with the use of this tool, the analysis performed, or the resulting report.
+
+
+[INFO] Analysis Started
+[INFO] Finished Archive Analyzer (0 seconds)
+[INFO] Finished File Name Analyzer (0 seconds)
+[INFO] Finished Jar Analyzer (0 seconds)
+[INFO] Finished Dependency Merging Analyzer (0 seconds)
+[INFO] Finished Version Filter Analyzer (0 seconds)
+[INFO] Finished Hint Analyzer (0 seconds)
+[INFO] Created CPE Index (3 seconds)
+[INFO] Finished CPE Analyzer (3 seconds)
+[INFO] Finished False Positive Analyzer (0 seconds)
+[INFO] Finished NVD CVE Analyzer (0 seconds)
+[WARN] Unable to determine Package-URL identifiers for 1 dependencies
+[INFO] Finished Sonatype OSS Index Analyzer (0 seconds)
+[INFO] Finished Vulnerability Suppression Analyzer (0 seconds)
+[INFO] Finished Dependency Bundling Analyzer (0 seconds)
+[INFO] Analysis Complete (4 seconds)
+[INFO] Writing report to: /report/dependency-check-report.xml
+[INFO] Writing report to: /report/dependency-check-report.html
+[INFO] Writing report to: /report/dependency-check-report.json
+[INFO] Writing report to: /report/dependency-check-report.csv
+[INFO] Writing report to: /report/dependency-check-junit.xml
+[Pipeline] sh
++ cat /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml
+<?xml version="1.0"?><analysis xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.2.5.xsd"><scanInfo><engineVersion>6.0.5</engineVersion><dataSource><name>NVD CVE Checked</name><timestamp>2021-01-15T13:01:35</timestamp></dataSource><dataSource><name>NVD CVE Modified</name><timestamp>2021-01-15T11:02:29</timestamp></dataSource><dataSource><name>VersionCheckOn</name><timestamp>2021-01-15T13:01:35</timestamp></dataSource></scanInfo><projectInfo><name>My OWASP Dependency Check Project</name><reportDate>2021-01-15T15:27:34.252082Z</reportDate><credits>This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.</credits></projectInfo><dependencies><dependency isVirtual="false"><fileName>WebApp.war</fileName><filePath>/src/target/WebApp.war</filePath><md5>76cdb2bad9582d23c1f6f4d868218d6c</md5><sha1>b04f3ee8f5e43fa3b162981b50bb72fe1acabb33</sha1><sha256>8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85</sha256><evidenceCollected><evidence type="vendor" confidence="HIGH"><source>file</source><name>name</name><value>WebApp</value></evidence><evidence type="product" confidence="HIGH"><source>file</source><name>name</name><value>WebApp</value></evidence></evidenceCollected></dependency></dependencies></analysis>
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SAST)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: sonar
+[Pipeline] {
+[Pipeline] sh
++ mvn sonar:sonar
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m---------------------< [0;36mlu.amazon.aws.demo:WebApp[0;1m >----------------------[m
+[[1;34mINFO[m] [1mBuilding WebApp Maven Webapp 1.0-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ war ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32msonar-maven-plugin:3.8.0.2131:sonar[m [1m(default-cli)[m @ [36mWebApp[0;1m ---[m
+[[1;34mINFO[m] User cache: /var/lib/jenkins/.sonar/cache
+[[1;34mINFO[m] SonarQube version: 8.6.0
+[[1;34mINFO[m] Default locale: "en_US", source code encoding: "UTF-8" (analysis is platform dependent)
+[[1;33mWARNING[m] SonarScanner will require Java 11 to run starting in SonarQube 8.x
+[[1;34mINFO[m] Load global settings
+[[1;34mINFO[m] Load global settings (done) | time=204ms
+[[1;34mINFO[m] Server id: BF41A1F2-AXcGi1rX9D_I38ZoAyZG
+[[1;34mINFO[m] User cache: /var/lib/jenkins/.sonar/cache
+[[1;34mINFO[m] Load/download plugins
+[[1;34mINFO[m] Load plugins index
+[[1;34mINFO[m] Load plugins index (done) | time=90ms
+[[1;34mINFO[m] Load/download plugins (done) | time=173ms
+[[1;34mINFO[m] Process project properties
+[[1;34mINFO[m] Process project properties (done) | time=9ms
+[[1;34mINFO[m] Execute project builders
+[[1;34mINFO[m] Execute project builders (done) | time=1ms
+[[1;34mINFO[m] Project key: lu.amazon.aws.demo:WebApp
+[[1;34mINFO[m] Base dir: /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline
+[[1;34mINFO[m] Working dir: /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline/target/sonar
+[[1;34mINFO[m] Load project settings for component key: 'lu.amazon.aws.demo:WebApp'
+[[1;34mINFO[m] Load project settings for component key: 'lu.amazon.aws.demo:WebApp' (done) | time=44ms
+[[1;34mINFO[m] Load quality profiles
+[[1;34mINFO[m] Load quality profiles (done) | time=244ms
+[[1;34mINFO[m] Auto-configuring with CI 'Jenkins'
+[[1;34mINFO[m] Load active rules
+[[1;34mINFO[m] Load active rules (done) | time=2710ms
+[[1;33mWARNING[m] SCM provider autodetection failed. Please use "sonar.scm.provider" to define SCM of your project, or disable the SCM Sensor in the project settings.
+[[1;34mINFO[m] Indexing files...
+[[1;34mINFO[m] Project configuration:
+[[1;34mINFO[m] 1 file indexed
+[[1;34mINFO[m] Quality profile for xml: Sonar way
+[[1;34mINFO[m] ------------- Run sensors on module WebApp Maven Webapp
+[[1;34mINFO[m] Load metrics repository
+[[1;34mINFO[m] Load metrics repository (done) | time=31ms
+[[1;34mINFO[m] Sensor CSS Rules [cssfamily]
+[[1;34mINFO[m] No CSS, PHP, HTML or VueJS files are found in the project. CSS analysis is skipped.
+[[1;34mINFO[m] Sensor CSS Rules [cssfamily] (done) | time=2ms
+[[1;34mINFO[m] Sensor JaCoCo XML Report Importer [jacoco]
+[[1;34mINFO[m] 'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+[[1;34mINFO[m] No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+[[1;34mINFO[m] Sensor JaCoCo XML Report Importer [jacoco] (done) | time=4ms
+[[1;34mINFO[m] Sensor C# Properties [csharp]
+[[1;34mINFO[m] Sensor C# Properties [csharp] (done) | time=0ms
+[[1;34mINFO[m] Sensor JavaXmlSensor [java]
+[[1;34mINFO[m] 1 source files to be analyzed
+[[1;34mINFO[m] Load project repositories
+[[1;34mINFO[m] Load project repositories (done) | time=22ms
+[[1;34mINFO[m] Sensor JavaXmlSensor [java] (done) | time=220ms
+[[1;34mINFO[m] 1/1 source files have been analyzed
+[[1;34mINFO[m] Sensor HTML [web]
+[[1;34mINFO[m] Sensor HTML [web] (done) | time=4ms
+[[1;34mINFO[m] Sensor XML Sensor [xml]
+[[1;34mINFO[m] 1 source files to be analyzed
+[[1;34mINFO[m] Sensor XML Sensor [xml] (done) | time=359ms
+[[1;34mINFO[m] 1/1 source files have been analyzed
+[[1;34mINFO[m] Sensor VB.NET Properties [vbnet]
+[[1;34mINFO[m] Sensor VB.NET Properties [vbnet] (done) | time=2ms
+[[1;34mINFO[m] ------------- Run sensors on project
+[[1;34mINFO[m] Sensor Zero Coverage Sensor
+[[1;34mINFO[m] Sensor Zero Coverage Sensor (done) | time=1ms
+[[1;34mINFO[m] SCM Publisher No SCM system was detected. You can use the 'sonar.scm.provider' property to explicitly specify it.
+[[1;34mINFO[m] CPD Executor Calculating CPD for 0 files
+[[1;34mINFO[m] CPD Executor CPD calculation finished (done) | time=0ms
+[[1;34mINFO[m] Analysis report generated in 84ms, dir size=87 KB
+[[1;34mINFO[m] Analysis report compressed in 22ms, zip size=12 KB
+[[1;34mINFO[m] Analysis report uploaded in 148ms
+[[1;34mINFO[m] ANALYSIS SUCCESSFUL, you can browse http://localhost:9000/dashboard?id=lu.amazon.aws.demo%3AWebApp
+[[1;34mINFO[m] Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+[[1;34mINFO[m] More about the report processing at http://localhost:9000/api/ce/task?id=AXcGqN639D_I38ZoA3P8
+[[1;34mINFO[m] Analysis total time: 6.271 s
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  8.567 s
+[[1;34mINFO[m] Finished at: 2021-01-15T10:27:46-05:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[Pipeline] sh
++ cat target/sonar/report-task.txt
+projectKey=lu.amazon.aws.demo:WebApp
+serverUrl=http://localhost:9000
+serverVersion=8.6.0.39681
+dashboardUrl=http://localhost:9000/dashboard?id=lu.amazon.aws.demo%3AWebApp
+ceTaskId=AXcGqN639D_I38ZoA3P8
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXcGqN639D_I38ZoA3P8
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ mvn test
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m---------------------< [0;36mlu.amazon.aws.demo:WebApp[0;1m >----------------------[m
+[[1;34mINFO[m] [1mBuilding WebApp Maven Webapp 1.0-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ war ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mWebApp[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] skip non existing resourceDirectory /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.1:compile[m [1m(default-compile)[m @ [36mWebApp[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mWebApp[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] skip non existing resourceDirectory /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.1:testCompile[m [1m(default-testCompile)[m @ [36mWebApp[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.12.4:test[m [1m(default-test)[m @ [36mWebApp[0;1m ---[m
+[[1;34mINFO[m] No tests to run.
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  5.478 s
+[[1;34mINFO[m] Finished at: 2021-01-15T10:27:54-05:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy-To-Tomcat)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sshagent
+[ssh-agent] Using credentials kali (for jenkins)
+[ssh-agent] Looking for ssh-agent implementation...
+[ssh-agent]   Exec ssh-agent (binary ssh-agent on a remote machine)
+$ ssh-agent
+SSH_AUTH_SOCK=/tmp/ssh-AhgH0MYpxmMg/agent.7257
+SSH_AGENT_PID=7260
+Running ssh-add (command line suppressed)
+Identity added: /var/lib/jenkins/workspace/DevSecOps-Demo-App-CICD-Pipeline@tmp/private_key_3003781230599234975.key (kali@kali)
+[ssh-agent] Started.
+[Pipeline] {
+[Pipeline] sh
++ scp -o StrictHostKeyChecking=no target/test.war kali@192.168.1.100:/home/kali/Desktop/prod/apache-tomcat-8.5.61/webapps/test.war
+target/test.war: No such file or directory
++ true
+[Pipeline] }
+$ ssh-agent -k
+unset SSH_AUTH_SOCK;
+unset SSH_AGENT_PID;
+echo Agent pid 7260 killed;
+[ssh-agent] Stopped.
+[Pipeline] // sshagent
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (DAST)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.1.100:8080/webapp/
+2021-01-15 15:27:57,715 Could not find custom hooks file at /home/zap/.zap_hooks.py 
+Jan 15, 2021 3:28:05 PM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+Total of 384 URLs
+PASS: Vulnerable JS Library [10003]
+PASS: Cookie Without Secure Flag [10011]
+PASS: Incomplete or No Cache-control and Pragma HTTP Header Set [10015]
+PASS: Content-Type Header Missing [10019]
+PASS: Information Disclosure - Debug Error Messages [10023]
+PASS: Information Disclosure - Sensitive Information in URL [10024]
+PASS: Information Disclosure - Sensitive Information in HTTP Referrer Header [10025]
+PASS: HTTP Parameter Override [10026]
+PASS: Information Disclosure - Suspicious Comments [10027]
+PASS: Open Redirect [10028]
+PASS: Cookie Poisoning [10029]
+PASS: User Controllable Charset [10030]
+PASS: User Controllable HTML Element Attribute (Potential XSS) [10031]
+PASS: Viewstate [10032]
+PASS: Directory Browsing [10033]
+PASS: Heartbleed OpenSSL Vulnerability (Indicative) [10034]
+PASS: Strict-Transport-Security Header [10035]
+PASS: HTTP Server Response Header [10036]
+PASS: Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s) [10037]
+PASS: X-Backend-Server Header Information Leak [10039]
+PASS: Secure Pages Include Mixed Content [10040]
+PASS: HTTP to HTTPS Insecure Transition in Form Post [10041]
+PASS: HTTPS to HTTP Insecure Transition in Form Post [10042]
+PASS: User Controllable JavaScript Event (XSS) [10043]
+PASS: Big Redirect Detected (Potential Sensitive Information Leak) [10044]
+PASS: Retrieved from Cache [10050]
+PASS: X-ChromeLogger-Data (XCOLD) Header Information Leak [10052]
+PASS: CSP [10055]
+PASS: X-Debug-Token Information Leak [10056]
+PASS: Username Hash Found [10057]
+PASS: X-AspNet-Version Response Header [10061]
+PASS: PII Disclosure [10062]
+PASS: Timestamp Disclosure [10096]
+PASS: Hash Disclosure [10097]
+PASS: Cross-Domain Misconfiguration [10098]
+PASS: Modern Web Application [10109]
+PASS: Script Passive Scan Rules [50001]
+PASS: Insecure JSF ViewState [90001]
+PASS: Charset Mismatch [90011]
+PASS: WSDL File Detection [90030]
+PASS: Loosely Scoped Cookie [90033]
+WARN-NEW: Cookie No HttpOnly Flag [10010] x 1 
+	http://192.168.1.100:8080/examples/servlets/servlet/CookieExample (200)
+WARN-NEW: Cross-Domain JavaScript Source File Inclusion [10017] x 4 
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/webapp/ (200)
+WARN-NEW: X-Frame-Options Header Not Set [10020] x 12 
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/ (200)
+	http://192.168.1.100:8080/docs/ (200)
+	http://192.168.1.100:8080/docs/config/ (200)
+	http://192.168.1.100:8080/docs/security-howto.html (200)
+WARN-NEW: X-Content-Type-Options Header Missing [10021] x 12 
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/ (200)
+	http://192.168.1.100:8080/docs/ (200)
+	http://192.168.1.100:8080/docs/config/ (200)
+	http://192.168.1.100:8080/docs/security-howto.html (200)
+WARN-NEW: Content Security Policy (CSP) Header Not Set [10038] x 12 
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/ (200)
+	http://192.168.1.100:8080/robots.txt (404)
+	http://192.168.1.100:8080/sitemap.xml (404)
+	http://192.168.1.100:8080/docs/ (200)
+WARN-NEW: Cookie Without SameSite Attribute [10054] x 1 
+	http://192.168.1.100:8080/webapp/ (200)
+WARN-NEW: Weak Authentication Method [10105] x 2 
+	http://192.168.1.100:8080/manager/status (401)
+	http://192.168.1.100:8080/manager/html (401)
+WARN-NEW: Reverse Tabnabbing [10108] x 12 
+	http://192.168.1.100:8080/docs/ (200)
+	http://192.168.1.100:8080/docs/config/ (200)
+	http://192.168.1.100:8080/docs/security-howto.html (200)
+	http://192.168.1.100:8080/docs/manager-howto.html (200)
+	http://192.168.1.100:8080/docs/cluster-howto.html (200)
+WARN-NEW: Absence of Anti-CSRF Tokens [10202] x 12 
+	http://192.168.1.100:8080/webapp/ (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/RequestParamExample (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/CookieExample (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/SessionExample (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/SessionExample (200)
+WARN-NEW: Private IP Disclosure [2] x 5 
+	http://192.168.1.100:8080/docs/monitoring.html (200)
+	http://192.168.1.100:8080/docs/config/valve.html (200)
+	http://192.168.1.100:8080/docs/config/filter.html (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/RequestInfoExample (200)
+	http://192.168.1.100:8080/examples/jsp/snp/snoop.jsp (200)
+WARN-NEW: Session ID in URL Rewrite [3] x 3 
+	http://192.168.1.100:8080/examples/servlets/servlet/SessionExample;jsessionid=7DB9502B13575BBEFB7543DB65FBB6AD?dataname=foo&datavalue=bar (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/SessionExample;jsessionid=7DB9502B13575BBEFB7543DB65FBB6AD (200)
+	http://192.168.1.100:8080/examples/servlets/servlet/SessionExample;jsessionid=7DB9502B13575BBEFB7543DB65FBB6AD?dataname=ZAP&datavalue=ZAP (200)
+WARN-NEW: Application Error Disclosure [90022] x 7 
+	http://192.168.1.100:8080/docs/manager-howto.html (200)
+	http://192.168.1.100:8080/docs/jndi-datasource-examples-howto.html (200)
+	http://192.168.1.100:8080/docs/changelog.html (200)
+	http://192.168.1.100:8080/docs/jndi-resources-howto.html (200)
+	http://192.168.1.100:8080/docs/config/listeners.html (200)
+FAIL-NEW: 0	FAIL-INPROG: 0	WARN-NEW: 12	WARN-INPROG: 0	INFO: 0	IGNORE: 0	PASS: 41
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 2
+Finished: FAILURE

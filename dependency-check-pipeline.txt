@@ -1,1 +1,8 @@
-dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 1, failedNewLow: 3, failedNewMedium: 2, failedTotalCritical: 1, failedTotalHigh: 1, failedTotalLow: 4, failedTotalMedium: 2, pattern: 'dependency-check-report.xml', unstableNewCritical: 1, unstableNewHigh: 1, unstableNewLow: 2, unstableNewMedium: 1, unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 2, unstableTotalMedium: 1
+stage ('Source Composition Analysis') {
+      steps {
+        sh 'pwd'
+        dependencyCheck additionalArguments: '--scan target/test --format "ALL"', odcInstallation: '6.1.0'
+        dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 1, failedNewLow: 3, failedNewMedium: 2, failedTotalCritical: 1, failedTotalHigh: 1, failedTotalLow: 3, failedTotalMedium: 2, pattern: '**/dependency-check-report.xml', unstableNewCritical: 1, unstableNewHigh: 1, unstableNewLow: 2, unstableNewMedium: 1, unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 2, unstableTotalMedium: 1
+        sh 'cat dependency-check-report.html'
+      }
+    }
